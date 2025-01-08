@@ -5,15 +5,15 @@ import 'package:provider/provider.dart';
 import '../models/user.dart';
 import '../providers/user_provider.dart';
 
-class CommentCard extends StatefulWidget {
+class LikesCard extends StatefulWidget {
   final snap;
-  const CommentCard({Key? key,required this.snap});
+  const LikesCard({Key? key,required this.snap});
 
   @override
-  State<CommentCard> createState() => _CommentCardState();
+  State<LikesCard> createState() => _LikesCardState();
 }
 
-class _CommentCardState extends State<CommentCard> {
+class _LikesCardState extends State<LikesCard> {
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +26,7 @@ class _CommentCardState extends State<CommentCard> {
           children: [
             CircleAvatar(
               backgroundImage: NetworkImage('${widget.snap['profilePic']}'),
-            radius:25,),
+              radius:30,),
             Expanded(
               child: Padding(
                 padding: EdgeInsets.only(left:16,),
@@ -37,17 +37,11 @@ class _CommentCardState extends State<CommentCard> {
                     RichText(text: TextSpan(
                       children: [
                         TextSpan(
-                          text: '${widget.snap['userName']}    ',
-                          style: TextStyle(fontWeight: FontWeight.bold)
+                            text: '${widget.snap['userName']}',
+                            style: TextStyle(fontWeight: FontWeight.bold,fontSize: 17)
                         ),
-                        TextSpan(
-                          text:DateFormat.yMMMd().format(
-                              widget.snap['datePublished'].toDate()
-                          ),
-                          style: TextStyle(fontSize: 12,fontWeight: FontWeight.w400),
-                        )
 
-                    ],)),
+                      ],)),
                     SizedBox(
                       height: 5,
                     ),
@@ -55,12 +49,22 @@ class _CommentCardState extends State<CommentCard> {
                       children: [
 
                         TextSpan(
-                          text: '${widget.snap['text']}',
-                          style: TextStyle(fontSize: 17)
+                          text: '${widget.snap['name']}',
+                          style: TextStyle(fontWeight: FontWeight.bold,fontSize: 17,color: Colors.grey)
+                          ,
+                          // style: TextStyle(fontWeight: FontWeight.bold)
                         ),
                       ],)),
 
-
+                    // Padding(
+                    //   padding: EdgeInsets.only(top:4,),
+                    //   child: Text(
+                    //     DateFormat.yMMMd().format(
+                    //         widget.snap['datePublished'].toDate()
+                    //     ),
+                    //     style: TextStyle(fontSize: 12,fontWeight: FontWeight.w400),
+                    //   ),
+                    // )
                   ],
                 ),
               ),

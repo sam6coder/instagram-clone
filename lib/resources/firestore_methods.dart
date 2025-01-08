@@ -14,7 +14,8 @@ class FireStoreMethods{
       String uid,
       String username,
       String profImage,
-      String location
+      String location,
+      String name
       ) async{
     String res="Some error occured";
     
@@ -32,7 +33,8 @@ class FireStoreMethods{
           profileImage: profImage,
           location: location,
           datePublished: DateTime.now(),
-          likes: []);
+          likes: [],
+          name:name);
 
       _firestore.collection('posts').doc(postId).set(post.toJson(
       ));
@@ -63,10 +65,12 @@ class FireStoreMethods{
 
   Future<void> likePostDoubleTap(String postId,String uid, List likes) async{
     try {
-        await _firestore.collection('posts').doc(postId).update({'likes':FieldValue.arrayUnion([uid])
-
-        });
-      }catch(e){
+      if(likes.contains(uid)) {}else
+        {
+        await _firestore.collection('posts').doc(postId).update(
+            {'likes': FieldValue.arrayUnion([uid])
+            });
+      }}catch(e){
       print(e.toString());
     }
   }
@@ -94,22 +98,51 @@ class FireStoreMethods{
   }
 
 
-  // Future<String?> getDocumentByFieldValue(String fieldName, dynamic fieldValue) async {
-  //   try {
-  //     // Reference to the Firestore collection
-  //     CollectionReference collectionRef = FirebaseFirestore.instance.collection(
-  //         'posts');
-  //
-  //     // Query for documents where `fieldName` equals `fieldValue`
-  //     QuerySnapshot querySnapshot = await collectionRef.where(
-  //         fieldName, isEqualTo: fieldValue).get();
-  //     return querySnapshot.docs.first['username'] as String;
-  //   }catch(e){
-  //     print("Error getting document: ${e}");
-  //     return null;
-  //   }
-  // }
+  Future<void> likesPost(String postId,String uid, String username,String profilePic,String name ) async{
+    try {
+      CollectionReference document = await FirebaseFirestore.instance
+          .collection('posts').doc(postId).collection('likess');
+      QuerySnapshot querySnapshot = await document
+          .where('uid', isEqualTo:uid ).get();
+      if(querySnapshot.docs.isEmpty) {
+        String likesId = Uuid().v1();
+        await _firestore.collection('posts').doc(postId)
+            .collection('likess')
+            .doc(likesId)
+            .set({
+          'profilePic': profilePic,
+          'userName': username,
+          'uid': uid,
+          'datePublished': DateTime.now(),
+          'name': name
+        });
+      }
+      else{
+        String did=querySnapshot.docs[0].id;
+        await FirebaseFirestore.instance
+            .collection('posts')
+            .doc(postId)
+            .collection('likess')
+            .doc(did)
+            .delete();
 
+      }
+
+
+    }catch(e){
+      print(e.toString());
+    }
+  }
+
+Future<void> deletePost (String postId) async{
+    try{
+      
+      _firestore.collection('posts').doc(postId).delete();
+
+    }catch(err){
+      print(err.toString());
+    }
+}
 
 }
 

@@ -25,11 +25,12 @@ Future<String>  signUpUser( {
     required String password,
     required String username,
     required String bio,
-    required Uint8List file
+    required Uint8List file,
+  required String name
 })async {
      String res="Some error occurred";
      try{
-       if(email.isNotEmpty || password.isNotEmpty || username.isNotEmpty || bio.isNotEmpty || file!=null){
+       if(email.isNotEmpty || password.isNotEmpty || username.isNotEmpty || bio.isNotEmpty || file!=null || name.isNotEmpty){
         UserCredential cred=await  _auth.createUserWithEmailAndPassword(email: email, password: password);
         print(cred.user);
 
@@ -44,7 +45,7 @@ Future<String>  signUpUser( {
         // );
 
         String photoUrl=await StorageMethods().uploadProfileImage('profilePics', file, false);
-        UserModel user=UserModel(email:email,username:username,uid:cred.user!.uid,bio:bio,followers:[],following:[],photoUrl: photoUrl);
+        UserModel user=UserModel(email:email,username:username,uid:cred.user!.uid,bio:bio,followers:[],following:[],photoUrl: photoUrl,name: name);
 
         firestore.collection('users').doc(cred.user!.uid).set(user.toJson());
         // await firestore.collection('users').add({

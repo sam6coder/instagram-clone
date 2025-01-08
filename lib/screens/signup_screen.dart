@@ -21,6 +21,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController bioController = TextEditingController();
   final TextEditingController usernameController = TextEditingController();
+  final TextEditingController nameController = TextEditingController();
+
   Uint8List? _image;
   bool isLoading=false;
 
@@ -47,7 +49,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
           password: passwordController.text,
           username: usernameController.text,
           bio: bioController.text,
-          file: _image!);
+          file: _image!,
+      name:nameController.text);
 
       setState(() {
         isLoading = false;
@@ -155,6 +158,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   textEditingController: bioController),
                         const SizedBox(
                                 height: 24,
+                        ),
+                        TextFieldInput(
+                            hintText: 'Enter your name',
+                            textInputType: TextInputType.text,
+                            textEditingController: nameController),
+                        const SizedBox(
+                          height: 24,
                         ),
                         InkWell(
                                 onTap: signUpUser,

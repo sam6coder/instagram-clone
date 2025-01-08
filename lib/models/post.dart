@@ -12,8 +12,9 @@ class PostModel{
   final String profileImage;
   final String location;
   final likes;
+  final String name;
 
-  const PostModel({required this.description,required this.uid,required this.photoUrl,required this.username,required this.postId,required this.postUrl,required this.profileImage,required this.location,required this.datePublished,required this.likes});
+  const PostModel({required this.name,required this.description,required this.uid,required this.photoUrl,required this.username,required this.postId,required this.postUrl,required this.profileImage,required this.location,required this.datePublished,required this.likes});
 
   Map<String,dynamic> toJson()=>{
     "username":username,
@@ -26,6 +27,7 @@ class PostModel{
     "postUrl":postUrl,
     "description":description,
     "postId":postId,
+    "name":name
 
   };
 
@@ -41,6 +43,7 @@ class PostModel{
       postUrl: snapshot['postUrl'],
       likes: snapshot['likes'],
       datePublished: snapshot['datePublished'],
+      name:snapshot['name']
 
 
     );

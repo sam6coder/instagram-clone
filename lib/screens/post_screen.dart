@@ -31,12 +31,12 @@ class _PostScreenState extends State<PostScreen> {
   String location = '';
   List<String> words = [];
 
-  void postImage(String uid, String username, String profImage,List<Uint8List> _file) async {
+  void postImage(String uid, String username, String profImage,List<Uint8List> _file,String name) async {
     setState(() {
       isLoading=true;
     });
     try {
-        String res=await  FireStoreMethods().uploadPost(captionController.text, _files,uid,username, profImage, location);
+        String res=await  FireStoreMethods().uploadPost(captionController.text, _files,uid,username, profImage, location,name);
         if(res=="success"){
           setState(() {
             isLoading=false;
@@ -272,7 +272,7 @@ class _PostScreenState extends State<PostScreen> {
                       }
 
                         postImage(
-                            user.uid, user.username, user.photoUrl, _files);
+                            user.uid, user.username, user.photoUrl, _files,user.name);
 
                     },
                   ),

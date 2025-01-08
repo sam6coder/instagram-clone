@@ -6,6 +6,7 @@ import 'package:instagram_clone/providers/user_provider.dart';
 import 'package:instagram_clone/resources/firestore_methods.dart';
 import 'package:instagram_clone/screens/comment_screen.dart';
 import 'package:instagram_clone/utils/colors.dart';
+import 'package:instagram_clone/utils/utils.dart';
 import 'package:instagram_clone/widgets/like_animation.dart';
 import 'package:instagram_clone/widgets/likes_widget.dart';
 import 'package:instagram_clone/widgets/video_player.dart';
@@ -26,6 +27,7 @@ class PostCard extends StatefulWidget {
 }
 
 class _PostCardState extends State<PostCard> {
+  int docLen=0;
   String? username;
 
   // Future<String?> find() async{
@@ -53,9 +55,24 @@ class _PostCardState extends State<PostCard> {
     }
   }
 
+  void getDocumentCount() async {
+    try {
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('posts').doc(widget.snap['postId']).collection('comments')
+          .get();
+        docLen=querySnapshot.docs.length;
+
+       // Returns the count of documents
+    } catch (e) {
+showAlertToast(msg: e.toString(), color: Colors.pink);
+    }
+  }
+
+
   @override
   void initState() {
     getDocumentByFieldValue();
+    getDocumentCount();
   }
 
   bool isLikeAnimating = false;
@@ -113,11 +130,11 @@ class _PostCardState extends State<PostCard> {
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 18),
                       ),
-                      if (widget.snap['location'] != '')
+                      if (widget.snap['location'] != '' || widget.snap['location']!=null)
                         Text(
                           widget.snap['location']
                               .split(',')
-                              .sublist(0, 2)
+                              .sublist(0, 1)
                               .join(','),
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 13),
@@ -257,6 +274,7 @@ class _PostCardState extends State<PostCard> {
                                   widget.snap['postId'],
                                   user.uid,
                                   widget.snap['likes']);
+                              await FireStoreMethods().likesPost(widget.snap['postId'], user.uid, user.username, user.photoUrl,user.name);
                               await getDocumentByFieldValue();
 
                               setState(() {
@@ -293,7 +311,7 @@ class _PostCardState extends State<PostCard> {
                         ),
                         if (widget.snap['likes'].length >= 1)
                           Text(
-                            '${widget.snap['likes'].length}',
+                            '${docLen}',
                             style: TextStyle(fontSize: 17),
                           )
                       ],
@@ -331,7 +349,8 @@ class _PostCardState extends State<PostCard> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
+                if(widget.snap['likes'].length>=1)
+                  Row(
                   children: [
                     GestureDetector(
                       onTap: () {
@@ -340,7 +359,7 @@ class _PostCardState extends State<PostCard> {
                             backgroundColor: Colors.transparent,
                             context: context,
                             builder: (context) =>
-                                LikesSliderPage(likes: widget.snap['likes']));
+                                LikesSliderPage(snap: widget.snap));
                       },
                       child: Align(
                         alignment: Alignment.bottomLeft,
@@ -354,7 +373,6 @@ class _PostCardState extends State<PostCard> {
                         ),
                       ),
                     ),
-                    if (widget.snap['likes'].length >= 1)
                       Align(
                         alignment: Alignment.bottomLeft,
                         child: DefaultTextStyle(
