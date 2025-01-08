@@ -105,36 +105,23 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
 
-              Container(
-                height: 50,
-                width: MediaQuery.of(context).size.width*0.9,
-                padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.all(5),
-                    backgroundColor: Colors.blue,
-                    visualDensity: VisualDensity.standard,
-                    elevation: 5.0,
-                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    textStyle: const TextStyle(
-                      color: Colors.white,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8.0),
-                      side: const BorderSide(
-                        color: Colors.blue,
-                      ),
-                    ),
+              GestureDetector(
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const SignUpScreen(),
                   ),
-                  child:  Text(
-                    'Sign Up',
-                    style: const TextStyle(fontSize: 17, color: Colors.white),
-                  ),
-                  onPressed: () {
-                    // onSubmit();
-                  },
                 ),
-              )
+                child: Container(
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  child: const Text(
+                    ' Signup.',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.blue
+                    ),
+                  ),
+                ),
+              ),
             ],
           )
 

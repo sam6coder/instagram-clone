@@ -85,9 +85,9 @@ class _PostCardState extends State<PostCard> {
 
   @override
   Widget build(BuildContext context) {
-    final UserModel user = Provider.of<UserProvider>(context).getUser;
+    final UserModel? user = Provider.of<UserProvider>(context).getUser;
 
-    return Container(
+    return (user==null)?CircularProgressIndicator():Container(
       color: mobileBackgroundColor,
       padding: EdgeInsets.symmetric(vertical: 10),
       child: Column(
@@ -335,8 +335,13 @@ class _PostCardState extends State<PostCard> {
                   children: [
                     GestureDetector(
                       onTap: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>LikesSliderPage(likes: widget.snap['likes'])));
-                                                },
+                        showModalBottomSheet(
+                            isScrollControlled: true,
+                            backgroundColor: Colors.transparent,
+                            context: context,
+                            builder: (context) =>
+                                LikesSliderPage(likes: widget.snap['likes']));
+                      },
                       child: Align(
                         alignment: Alignment.bottomLeft,
                         child: DefaultTextStyle(
@@ -357,7 +362,7 @@ class _PostCardState extends State<PostCard> {
                               .textTheme
                               .bodyMedium!
                               .copyWith(fontWeight: FontWeight.bold),
-                          child: (username != null)
+                          child: (username != null )
                               ? Text('${username!} and others',
                                   style: Theme.of(context)
                                       .textTheme
