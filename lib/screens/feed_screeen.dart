@@ -4,6 +4,10 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:instagram_clone/utils/colors.dart';
 import 'package:instagram_clone/utils/utils.dart';
 import 'package:instagram_clone/widgets/post_card.dart';
+import 'package:provider/provider.dart';
+
+import '../models/user.dart';
+import '../providers/user_provider.dart';
 
 class FeedScreen extends StatefulWidget {
   const FeedScreen({super.key});
@@ -13,8 +17,19 @@ class FeedScreen extends StatefulWidget {
 }
 
 class _FeedScreenState extends State<FeedScreen> {
+
+  @override
+  void initState(){
+    super.initState();
+    final user = Provider.of<UserProvider>(context,listen: false);
+    user.refreshUser();
+
+  }
+
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<UserProvider>(context);
+
     return Scaffold(
         appBar: AppBar(
           backgroundColor: mobileBackgroundColor,
@@ -32,7 +47,7 @@ class _FeedScreenState extends State<FeedScreen> {
 
           ],
         ),
-      body: StreamBuilder(  //listen to realtime data
+      body: (user.user==null)?Center(child: CircularProgressIndicator()):StreamBuilder(  //listen to realtime data
 
       stream: FirebaseFirestore.instance.collection('posts').orderBy('datePublished',descending: true).snapshots(),
           builder: (context,AsyncSnapshot<QuerySnapshot<Map<String,dynamic>>> snapshot){

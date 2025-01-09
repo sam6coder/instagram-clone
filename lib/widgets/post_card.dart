@@ -73,6 +73,7 @@ showAlertToast(msg: e.toString(), color: Colors.pink);
   void initState() {
     getDocumentByFieldValue();
     getDocumentCount();
+
   }
 
   bool isLikeAnimating = false;
@@ -152,7 +153,10 @@ showAlertToast(msg: e.toString(), color: Colors.pink);
                                     shrinkWrap: true,
                                     children: ['Delete']
                                         .map((e) => InkWell(
-                                              onTap: () {},
+                                              onTap: () async{
+                                                await FireStoreMethods().deletePost(widget.snap['postId']);
+                                                  Navigator.of(context).pop();
+                                              },
                                               child: Container(
                                                 padding: EdgeInsets.symmetric(
                                                     vertical: 12,
