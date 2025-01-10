@@ -14,10 +14,12 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+
   Map<String, dynamic> userData = {};
   int postLen=0;
   int followers=0;
   int following=0;
+  bool isLoading=false;
 
   bool isFollowing=false;
 
@@ -28,6 +30,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   getData() async {
+
+
     try {
       var snap = await FirebaseFirestore.instance
           .collection('users')
@@ -88,7 +92,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       backgroundColor: Colors.grey,
                       backgroundImage: NetworkImage(
                           userData['photoUrl']),
-                      radius: 45,
+                      radius: 48,
                     ),
                     Expanded(
                       flex: 1,
@@ -103,6 +107,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               buildStateColumn(following, "following")
                             ],
                           ),
+                          FirebaseAuth.instance.currentUser!.uid==widget.uid?
+                          FollowButton(textColor: Colors.white, text: 'Edit Profile', function: (){}, backgroundColor: Color(0xFF2B3036), borderColor: Color(0xFF2B3036)):
+                          (isFollowing)?FollowButton(textColor: Colors.green, text: 'UnFollow', function: (){}, backgroundColor: Color(0xFF2B3036), borderColor: Color(0xFF2B3036)):
+                          FollowButton(textColor: Colors.white, text: 'Follow', function: (){}, backgroundColor: Color(0xFF0091EA), borderColor: Color(0xFF0091EA))
+
 
                         ],
                       ),
@@ -128,16 +137,33 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
                 ),
-                FirebaseAuth.instance.currentUser!.uid==widget.uid?
-                    FollowButton(textColor: Colors.white, text: 'Edit Profile', function: (){}, backgroundColor: Color(0xFF2B3036), borderColor: Color(0xFF2B3036)):
-                (isFollowing)?FollowButton(textColor: Colors.green, text: 'Unfollow', function: (){}, backgroundColor: Color(0xFF2B3036), borderColor: Color(0xFF2B3036)):
-                FollowButton(textColor: Colors.white, text: 'Unfollow', function: (){}, backgroundColor: Color(0xFF0091EA), borderColor: Color(0xFF0091EA))
 
 
 
               ],
             ),
           ),
+          FutureBuilder(future: FirebaseFirestore.instance.collection('posts').where('uid',isEqualTo: widget.uid).get(),
+              builder: (context,snapshot){
+            if(snapshot.connectionState==ConnectionState.waiting){
+              return Center(child: CircularProgressIndicator());
+            }
+
+            return GridView.builder(
+                shrinkWrap: true,
+                itemCount: (snapshot.data! as dynamic).docs.length,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3,crossAxisSpacing: 5,mainAxisSpacing: 5,childAspectRatio: 1),
+                itemBuilder: (context,index){
+                  DocumentSnapshot snap=(snapshot.data! as dynamic).docs[index];
+
+                  return Container(
+                    child: Image(
+                      image: NetworkImage(snap['postUrl']),
+                      fit: BoxFit.cover,
+                    ),
+                  );
+                });
+              })
         ],
       ),
     );
