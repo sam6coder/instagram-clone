@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:instagram_clone/resources/auth_methods.dart';
 import 'package:instagram_clone/resources/firestore_methods.dart';
 import 'package:instagram_clone/screens/edit_profile.dart';
+import 'package:instagram_clone/screens/login_screen.dart';
 import 'package:instagram_clone/utils/colors.dart';
 import 'package:instagram_clone/utils/utils.dart';
 import 'package:instagram_clone/widgets/follow_button.dart';
@@ -81,6 +83,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
         title: (userData.isNotEmpty)?
           Text(userData['username'],style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),):null,
         centerTitle: false,
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right:15.0),
+            child: GestureDetector(onTap: (){
+              AuthMethods().signOutUser();
+              Navigator.of(context).push(MaterialPageRoute(builder: (context)=>LoginScreen()));}, child: Image.asset('assets/images/turn-off.png',color: Colors.pink,height: 25,width: 25,)),
+            
+          )
+        ],
       ),
       body:(userData.isEmpty)?Center(child: CircularProgressIndicator()): ListView(
         children: [

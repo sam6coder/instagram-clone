@@ -1,4 +1,5 @@
 import 'dart:typed_data';
+import 'package:instagram_clone/utils/utils.dart';
 import 'package:uuid/uuid.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -165,10 +166,23 @@ class FireStoreMethods {
           'following': FieldValue.arrayUnion([followId])
         });
       }
-    } catch (e) {}
+    } catch (e) {
+      showAlertToast(msg: e.toString(), color: Colors.pink);
+    }
   }
 
-  // Future<void> editProfile(String uid){
-  //
-  // }
+  Future<String> editProfile(String uid,String username,String bio,String name,String? gender,String? pronoun) async{
+    try{
+
+
+      await _firestore.collection('users').doc(uid).update({'username':username,'name':name,'bio':bio,'gender':gender,'pronoun':pronoun});
+      print("success");
+      return "success";
+    }catch(e){
+      showAlertToast(msg: e.toString(), color: Colors.pink);
+      return e.toString();
+    }
+  }
+
+
 }

@@ -65,7 +65,23 @@ class _LoginScreenState extends State<LoginScreen> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Flexible(child: Container(),flex:1,),
-            SvgPicture.asset('assets/images/ic_instagram.svg',color:primaryColor,height: 64,),
+            ShaderMask(
+                shaderCallback: (Rect bounds){
+                  return LinearGradient(colors: [
+
+                    Color(0xFF833AB4), // Purple
+                    Color(0xFFC13584), // Dark Pink
+                    Color(0xFFE1306C), // Bright Pink
+                    Color(0xFFFD1D1D), // Red
+                    Color(0xFFF77737),
+                    Colors.yellow
+                  ],
+                  begin: Alignment.topLeft,
+                  end:Alignment.bottomRight).createShader(bounds);
+                },
+                blendMode: BlendMode.srcIn,
+
+                child: SvgPicture.asset('assets/images/ic_instagram.svg',height: 64,)),
             SizedBox(
               height: 64,
               
@@ -83,7 +99,7 @@ class _LoginScreenState extends State<LoginScreen> {
           InkWell(
             onTap: login,
             child: Container(
-              child:isLoading?Center(child: CircularProgressIndicator(color: primaryColor,),):Text('Log In'),
+              child:isLoading?Center(child: CircularProgressIndicator(color: primaryColor,),):Text('Log In',style: TextStyle(color: Colors.white,fontSize: 20,fontWeight: FontWeight.bold),),
 
               width: double.infinity,
               alignment: Alignment.center,
