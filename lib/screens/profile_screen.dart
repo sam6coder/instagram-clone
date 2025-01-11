@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:instagram_clone/resources/firestore_methods.dart';
+import 'package:instagram_clone/screens/edit_profile.dart';
 import 'package:instagram_clone/utils/colors.dart';
 import 'package:instagram_clone/utils/utils.dart';
 import 'package:instagram_clone/widgets/follow_button.dart';
@@ -108,9 +110,49 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ],
                           ),
                           FirebaseAuth.instance.currentUser!.uid==widget.uid?
-                          FollowButton(textColor: Colors.white, text: 'Edit Profile', function: (){}, backgroundColor: Color(0xFF2B3036), borderColor: Color(0xFF2B3036)):
-                          (isFollowing)?FollowButton(textColor: Colors.green, text: 'UnFollow', function: (){}, backgroundColor: Color(0xFF2B3036), borderColor: Color(0xFF2B3036)):
-                          FollowButton(textColor: Colors.white, text: 'Follow', function: (){}, backgroundColor: Color(0xFF0091EA), borderColor: Color(0xFF0091EA))
+                          FollowButton(textColor: Colors.white, text: 'Edit Profile', function: (){
+                            Navigator.of(context).push(MaterialPageRoute(builder: (context)=>EditProfile()));
+                          }, backgroundColor: Color(0xFF2B3036), borderColor: Color(0xFF2B3036)):
+                          (isFollowing)?(isLoading)?Padding(
+                            padding: const EdgeInsets.only(top:10.0),
+                            child: Container(width: 250,
+                                height: 40,decoration: BoxDecoration(
+                                    borderRadius:
+                                    BorderRadius.circular(5.0),
+                                    color: Color(0xFF2B3036), border: Border.all(color: Colors.white)),child: Center(child: SizedBox(width:20,height:20,child: CircularProgressIndicator()))),
+                          ):FollowButton(textColor: Colors.green, text: 'UnFollow', function: () async{
+                           setState(() {
+
+                             isLoading=true;
+                           });
+                            await FireStoreMethods().followUser(FirebaseAuth.instance.currentUser!.uid, widget.uid);
+                           setState(() {
+                             isFollowing=false;
+                             followers--;
+                             isLoading=false;
+                           });
+
+                          }, backgroundColor: Color(0xFF2B3036), borderColor: Color(0xFF2B3036)):
+                          (isLoading)?Padding(
+                            padding: const EdgeInsets.only(top:10.0),
+                            child: Container(width: 250,
+                                height: 40,decoration: BoxDecoration(
+                                    borderRadius:
+                                    BorderRadius.circular(5.0),
+                                    color: Color(0xFF2B3036), border: Border.all(color: Colors.white)),child: Center(child: SizedBox(width:20,height:20,child: CircularProgressIndicator()))),
+                          ):FollowButton(textColor: Colors.white, text: 'Follow', function: () async{
+                            setState(() {
+                              isLoading=true;
+                            });
+                           await FireStoreMethods().followUser(FirebaseAuth.instance.currentUser!.uid, widget.uid);
+
+                           setState(() {
+                             isFollowing=true;
+                             followers++;
+                             isLoading=false;
+                           });
+
+                          }, backgroundColor: Color(0xFF0091EA), borderColor: Color(0xFF0091EA))
 
 
                         ],

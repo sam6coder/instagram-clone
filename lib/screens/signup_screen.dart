@@ -128,6 +128,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 ],
                         ),
                         const SizedBox(
+                          height: 24,
+                        ),
+                        TextFieldInput(
+                            hintText: 'Enter your name',
+                            textInputType: TextInputType.text,
+                            textEditingController: nameController),
+
+                        const SizedBox(
                                 height: 24,
                         ),
                         TextFieldInput(
@@ -159,13 +167,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         const SizedBox(
                                 height: 24,
                         ),
-                        TextFieldInput(
-                            hintText: 'Enter your name',
-                            textInputType: TextInputType.text,
-                            textEditingController: nameController),
-                        const SizedBox(
-                          height: 24,
-                        ),
+
                         InkWell(
                                 onTap: signUpUser,
                                 child: Container(

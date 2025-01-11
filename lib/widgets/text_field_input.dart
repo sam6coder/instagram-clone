@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:instagram_clone/utils/colors.dart';
 
 class TextFieldInput extends StatelessWidget {
   final TextEditingController textEditingController;
@@ -13,14 +14,20 @@ class TextFieldInput extends StatelessWidget {
         borderSide: Divider.createBorderSide(context)
     );
     return TextField(
+
       controller: textEditingController,
       decoration: InputDecoration(
-        hintText: hintText,
+
+        labelText: hintText,
         border:inputBorder,
         focusedBorder: inputBorder,
         enabledBorder: inputBorder,
         filled: true,
-        contentPadding: EdgeInsets.all(8)
+        contentPadding: EdgeInsets.all(17),
+        fillColor: mobileBackgroundColor,
+        floatingLabelStyle: TextStyle(color:Colors.grey),
+        floatingLabelBehavior: FloatingLabelBehavior.auto, // Automatically moves the label
+
 
       ),
       keyboardType: textInputType,

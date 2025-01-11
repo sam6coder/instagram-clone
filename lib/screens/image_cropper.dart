@@ -85,6 +85,11 @@ class _ImageCropperScreenState extends State<ImageCropperScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Image Cropper'),
+        centerTitle: false,
+        actions: [Padding(
+          padding: const EdgeInsets.only(right:15.0),
+          child: GestureDetector(onTap: (){Navigator.pop(context,File(_croppedFile!.path));}, child: Text('Done',style: TextStyle(color: Colors.blue,fontSize: 20),),),
+        )],
       ),
       body: Center(
         child: Stack(
@@ -115,7 +120,8 @@ class _ImageCropperScreenState extends State<ImageCropperScreen> {
                 Image.file(
                   File(widget.selectedImage.path),
                   height: 300,
-                  width: 200,
+                  width: MediaQuery.of(context).size.width,
+
                   fit: BoxFit.cover,
                 )
 
