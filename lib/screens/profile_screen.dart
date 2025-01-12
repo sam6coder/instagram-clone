@@ -91,7 +91,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             child: GestureDetector(onTap: (){
               AuthMethods().signOutUser();
               Navigator.of(context).push(MaterialPageRoute(builder: (context)=>LoginScreen()));}, child: Image.asset('assets/images/turn-off.png',color: Colors.pink,height: 25,width: 25,)),
-            
+
           )
         ],
       ),
@@ -192,23 +192,42 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
                 ),
+                SizedBox(
+                  height: 20,
+                ),
 
-
-
+                Icon(Icons.grid_view_sharp,color: Colors.white,size: 30,),
+                Divider(color: Colors.grey,height: 20),
+                // Image.asset('assets/images/minus-horizontal-straight-line.png',color: Colors.white,height: 50,width: 100,),
               ],
             ),
           ),
+
           FutureBuilder(future: FirebaseFirestore.instance.collection('posts').where('uid',isEqualTo: widget.uid).get(),
               builder: (context,snapshot){
             if(snapshot.connectionState==ConnectionState.waiting){
               return Center(child: CircularProgressIndicator());
             }
+            else if(!snapshot.hasData){
+              return Container(child:Column(children: [Text('No Posts Yet',style: TextStyle(color: Colors.white),)],));
+            }
+            else if((snapshot.data as dynamic).docs.length==0){
+              return Column(
+                children: [
+                  Container(child:Column(children: [Container(width: 80,height:80,decoration: BoxDecoration(borderRadius: BorderRadius.circular(50),border: Border.all(color: Colors.white,width: 2)),child: Icon(Icons.camera_alt_outlined,size: 55,)),Text('No Posts Yet',style: TextStyle(color: Colors.white,fontSize: 25,fontWeight: FontWeight.bold),)],)),
+
+                ],
+              );
+
+            }
+            print((snapshot.data as dynamic).docs);
 
             return GridView.builder(
                 shrinkWrap: true,
                 itemCount: (snapshot.data! as dynamic).docs.length,
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3,crossAxisSpacing: 5,mainAxisSpacing: 5,childAspectRatio: 1),
                 itemBuilder: (context,index){
+                  print(index);
                   DocumentSnapshot snap=(snapshot.data! as dynamic).docs[index];
 
                   return GestureDetector(
