@@ -5,9 +5,11 @@ import 'package:instagram_clone/resources/auth_methods.dart';
 import 'package:instagram_clone/resources/firestore_methods.dart';
 import 'package:instagram_clone/screens/edit_profile.dart';
 import 'package:instagram_clone/screens/login_screen.dart';
+import 'package:instagram_clone/screens/profile_posts.dart';
 import 'package:instagram_clone/utils/colors.dart';
 import 'package:instagram_clone/utils/utils.dart';
 import 'package:instagram_clone/widgets/follow_button.dart';
+import 'package:instagram_clone/widgets/post_card.dart';
 
 class ProfileScreen extends StatefulWidget {
   final String uid;
@@ -209,10 +211,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 itemBuilder: (context,index){
                   DocumentSnapshot snap=(snapshot.data! as dynamic).docs[index];
 
-                  return Container(
-                    child: Image(
-                      image: NetworkImage(snap['postUrl']),
-                      fit: BoxFit.cover,
+                  return GestureDetector(
+                    onTap: (){
+                      print(index);
+                      Navigator.of(context).push(MaterialPageRoute(builder: (context)=>ProfilePosts( snap: (snapshot.data! as dynamic).docs , selectedIndex: index,)));
+                    },
+                    child: Container(
+                      child: Image(
+                        image: NetworkImage(snap['postUrl']),
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   );
                 });
