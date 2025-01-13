@@ -73,6 +73,35 @@ class FireStoreMethods {
       print(e.toString());
     }
   }
+  Future<void> likesPostDoubleTap(String postId, String uid, String username,
+      String profilePic, String name) async {
+    try {
+      CollectionReference document = await FirebaseFirestore.instance
+          .collection('posts')
+          .doc(postId)
+          .collection('likess');
+      QuerySnapshot querySnapshot =
+      await document.where('uid', isEqualTo: uid).get();
+      if (querySnapshot.docs.isEmpty) {
+        String likesId = Uuid().v1();
+        await _firestore
+            .collection('posts')
+            .doc(postId)
+            .collection('likess')
+            .doc(likesId)
+            .set({
+          'profilePic': profilePic,
+          'userName': username,
+          'uid': uid,
+          'datePublished': DateTime.now(),
+          'name': name
+        });
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
 
   Future<void> commentPost(String postId, String uid, String username,
       String text, String profilePic) async {

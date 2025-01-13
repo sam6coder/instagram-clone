@@ -23,6 +23,7 @@ class _CommentScreenState extends State<CommentScreen> {
   @override
   void dispose() {
     super.dispose();
+    _commentController.clear();
     _commentController.dispose();
   }
 

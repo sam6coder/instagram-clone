@@ -28,7 +28,7 @@ class _LoginScreenState extends State<LoginScreen> {
       isLoading = true;
     });
     String res = await AuthMethods().loginUser(
-        email: emailController.text, password: passwordController.text);
+        email: emailController.text, password: passwordController.text,context: context);
     if (res == "success") {
       showAlertToast(msg: "Logged in Successfully", color: Colors.green);
       setState(() {

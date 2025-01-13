@@ -27,8 +27,6 @@ class PostCard extends StatefulWidget {
 }
 
 class _PostCardState extends State<PostCard> {
-  int docLen = 0;
-
   String? username;
 
   // Future<String?> find() async{
@@ -66,7 +64,7 @@ class _PostCardState extends State<PostCard> {
           .doc(widget.snap['postId'])
           .collection('comments')
           .get();
-      docLen = querySnapshot.docs.length;
+      commentLen = querySnapshot.docs.length;
 
       // Returns the count of documents
     } catch (e) {
@@ -79,8 +77,6 @@ class _PostCardState extends State<PostCard> {
     super.initState();
     getDocumentByFieldValue();
     getDocumentCount();
-     commentLen = widget.snap['likes'].length;
-
   }
 
   bool isLikeAnimating = false;
@@ -191,6 +187,12 @@ class _PostCardState extends State<PostCard> {
                   onDoubleTap: () async {
                     await FireStoreMethods().likePostDoubleTap(
                         widget.snap['postId'], user.uid, widget.snap['likes']);
+                    await FireStoreMethods().likesPostDoubleTap(
+                        widget.snap['postId'],
+                        user.uid,
+                        user.username,
+                        user.photoUrl,
+                        user.name);
                     setState(() {
                       isLikeAnimating = true;
                     });
@@ -232,9 +234,17 @@ class _PostCardState extends State<PostCard> {
                                           MediaQuery.of(context).size.height *
                                               0.35,
                                       width: double.infinity,
-                                      child: Image.network(
-                                        widget.snap['photoUrl'][index],
-                                        fit: BoxFit.cover,
+                                      child: Stack(
+                                        children:[ Image.network(
+                                          widget.snap['photoUrl'][index],
+                                          fit: BoxFit.cover,
+                                        width: double.infinity,
+                                        height: double.infinity,),
+                                        if(widget.snap['photoUrl'].length>1)
+                                        Positioned(
+                                            top:15,
+                                            right: 10,
+                                            child: Icon(Icons.web_stories,color: Colors.white,size: 25,))],
                                       ),
                                     );
                                   } else if (snapshot.data == "video") {
@@ -340,11 +350,34 @@ class _PostCardState extends State<PostCard> {
                               SizedBox(
                                 width: 3,
                               ),
-                              if (widget.snap['likes'].length >= 1)
-                                Text(
-                                  '${commentLen}',
-                                  style: TextStyle(fontSize: 17),
-                                )
+                              StreamBuilder(
+                                stream: FirebaseFirestore.instance
+                                    .collection('posts')
+                                    .doc(widget.snap['postId'])
+                                    .collection('comments')
+                                    .snapshots(),
+                                builder: (context,
+                                    AsyncSnapshot<
+                                            QuerySnapshot<Map<String, dynamic>>>
+                                        snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    Text(
+                                      '',
+                                      style: TextStyle(fontSize: 17),
+                                    );
+                                  }
+                                  if(snapshot.hasData)
+                                  commentLen = snapshot.data!.docs.length;
+                                  return (commentLen>=1)?Text(
+                                    '${commentLen}',
+                                    style: TextStyle(fontSize: 17),
+                                  ):Text(
+                                    '',
+                                    style: TextStyle(fontSize: 17),
+                                  );
+                                },
+                              )
                             ],
                           ),
                           SizedBox(

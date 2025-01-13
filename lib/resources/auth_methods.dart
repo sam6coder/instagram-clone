@@ -6,12 +6,16 @@ import 'dart:typed_data';
 import 'package:instagram_clone/models/user.dart';
 import 'package:instagram_clone/resources/storage_methods.dart';
 import 'package:instagram_clone/utils/utils.dart';
+import 'package:provider/provider.dart';
+
+import '../providers/user_provider.dart';
 
 class AuthMethods {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   Future<UserModel> getUserDetails() async {
+    print(" new ${_auth.currentUser!.uid}");
     User currentUser = _auth.currentUser!;
     DocumentSnapshot snap =
         await firestore.collection('users').doc(currentUser.uid).get();
@@ -79,13 +83,24 @@ class AuthMethods {
   }
 
   Future<String> loginUser(
-      {required String email, required String password}) async {
+      {required String email, required String password,required BuildContext context}) async {
     String res = "Some error occurred";
 
     try {
       if (email.isNotEmpty || password.isNotEmpty) {
-        await _auth.signInWithEmailAndPassword(
+        UserCredential userc=await _auth.signInWithEmailAndPassword(
             email: email, password: password);
+        // User? user=userc.user;
+        // await user?.reload();
+        // user=_auth.currentUser;
+//         if(context.mounted)
+// {
+//   setState(() {
+//     // Update the ProfileScreen's uid with the new user's uid
+//     homeScreenItems[4] = ProfileScreen(uid: FirebaseAuth.instance.currentUser!.uid);
+//   });
+// }
+
         res = "success";
       } else {
         res = "Please enter all the fields";
@@ -96,7 +111,14 @@ class AuthMethods {
     return res;
   }
 
-  Future<void> signOutUser() async {
-    await _auth.signOut();
+  Future<String> signOutUser(BuildContext context) async {
+    try {
+      await _auth.signOut();
+      Provider.of<UserProvider>(context, listen: false).user = null; // Reset user state
+
+      return "success";
+    }catch(e){
+      return (e.toString());
+    }
   }
 }

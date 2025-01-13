@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:instagram_clone/utils/global_variables.dart';
 import '../models/user.dart';
 import '../providers/user_provider.dart';
+import '../screens/profile_screen.dart';
 
 class MobileScreenLayput extends StatefulWidget {
   const MobileScreenLayput({super.key});
@@ -28,6 +29,8 @@ class _MobileScreenLayputState extends State<MobileScreenLayput> {
   void initState() {
     super.initState();
     pageController = PageController();
+        homeScreenItems[4] = ProfileScreen(uid: FirebaseAuth.instance.currentUser!.uid);
+
   }
 
   @override

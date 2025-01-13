@@ -183,7 +183,7 @@ class _PostScreenState extends State<PostScreen> {
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                         Text(
-                                          "${words.sublist(0,2).join(',')}",
+                                          "${words[0]}",
                                           style: TextStyle(
                                               color: Colors.blue, fontSize: 17),
                                         ),
@@ -194,9 +194,9 @@ class _PostScreenState extends State<PostScreen> {
                                       //     style: TextStyle(
                                       //         color: Colors.grey, fontSize: 15),
                                       //   ),
-                                      if (words[2].isNotEmpty)
+                                      if (words.length>1)
                                         Text(
-                                          "${words[2]}",
+                                          "${words[1]}",
                                           style: TextStyle(
                                               color: Colors.grey, fontSize: 15),
                                         ),

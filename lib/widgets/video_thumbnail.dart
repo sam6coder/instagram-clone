@@ -60,14 +60,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
           _isInitialized
               ? VideoPlayer(_controller) // Display video player thumbnail
               : Center(child: CircularProgressIndicator()), // Show loading spinner
-          Align(
-            alignment: Alignment.center,
-            child: Icon(
-              Icons.play_circle_fill,
-              color: Colors.white,
-              size: 40,
-            ),
-          ),
+
         ],
       ),
     );
