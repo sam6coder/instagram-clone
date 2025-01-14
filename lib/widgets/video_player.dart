@@ -58,7 +58,15 @@ class _VideoThumbnailState extends State<VideoThumbnail> {
           _isInitialized
               ? VideoPlayer(_controller) // Display video player thumbnail
               : Center(child: CircularProgressIndicator()),
-
+        if(!_isPlaying)
+          Align(
+            alignment: Alignment.center,
+            child: Icon(
+              Icons.play_circle_fill,
+              color: Colors.white,
+              size: 40,
+            ),
+          ),
         ],
       ),
     );

@@ -14,7 +14,6 @@ import 'package:instagram_clone/widgets/video_thumbnail.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
 import '../models/user.dart';
 
 class PostCard extends StatefulWidget {
