@@ -14,7 +14,6 @@ CORE FEATURES
 
 Authentication, storage, and database management are handled using Firebase services, ensuring scalability and reliability. Here are some screenshots
 
-<div style="display: flex; justify-content: center; align-items: center; gap: 30px;">
 <img src="https://github.com/user-attachments/assets/00a3b869-ff75-45b3-bade-3c26cf7da7e7" width="250">
 <img src="https://github.com/user-attachments/assets/7166f6ef-d768-4c92-b3f8-0b68bce25594" width="250">
 
@@ -31,7 +30,3 @@ Authentication, storage, and database management are handled using Firebase serv
 <img src="https://github.com/user-attachments/assets/ad45c3de-89c6-4587-9bfc-d7296cc00f5e" width="250">
 <img src="https://github.com/user-attachments/assets/d325edc3-b085-4b78-b70f-a1ebb8f20485" width="250">
 <img src="https://github.com/user-attachments/assets/baba64a0-ed63-4e85-b211-685ddb416adf" width="250"> 
-
-
-
-</div>
