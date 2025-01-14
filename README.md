@@ -8,7 +8,8 @@ CORE FEATURES
  - The app allows users to register, log in, and create profiles by providing email , profile image , username (unique) and bio.
  - Users can post image , video while editting using the image editor tools and add location of the memories .
  - Real-time likes, comments,delete post and a responsive feed (using StreamBuilder) .
- -  Users can also view and interact with other profiles, search for content, and explore posts seamlessly.
+ - Users can also view and interact with other profiles, search for content, and explore posts seamlessly.
+ - User can follow other public profiles
 
 
 Authentication, storage, and database management are handled using Firebase services, ensuring scalability and reliability. Here are some screenshots
