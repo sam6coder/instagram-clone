@@ -1,6 +1,6 @@
   <img src="https://github.com/sam6coder/smartattendance/assets/91368583/3cb4ac04-1793-421d-98e5-e468f1655fd2" width="250">
 
-1-<img src="https://github.com/user-attachments/assets/baba64a0-ed63-4e85-b211-685ddb416adf" width="250")
+1- <img src="https://github.com/user-attachments/assets/baba64a0-ed63-4e85-b211-685ddb416adf" width="250">
 
 2-![image](https://github.com/user-attachments/assets/2bef91ee-ac15-4e4b-a310-e1f5e26bd00f)
 
