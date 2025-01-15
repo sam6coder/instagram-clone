@@ -29,7 +29,7 @@ class _MobileScreenLayputState extends State<MobileScreenLayput> {
   void initState() {
     super.initState();
     pageController = PageController();
-        homeScreenItems[4] = ProfileScreen(uid: FirebaseAuth.instance.currentUser!.uid);
+        homeScreenItems[3] = ProfileScreen(uid: FirebaseAuth.instance.currentUser!.uid);
 
   }
 
@@ -77,12 +77,12 @@ class _MobileScreenLayputState extends State<MobileScreenLayput> {
             label: '',
             backgroundColor: primaryColor,
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.favorite,
-                color: _page == 3 ? primaryColor : secondaryColor),
-            label: '',
-            backgroundColor: primaryColor,
-          ),
+          // BottomNavigationBarItem(
+          //   icon: Icon(Icons.favorite,
+          //       color: _page == 3 ? primaryColor : secondaryColor),
+          //   label: '',
+          //   backgroundColor: primaryColor,
+          // ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person,
                 color: _page == 4 ? primaryColor : secondaryColor),

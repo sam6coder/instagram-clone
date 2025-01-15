@@ -9,6 +9,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:material_color_utilities/utils/color_utils.dart';
 import 'dart:typed_data';
 
+import '../utils/global_variables.dart';
+
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
 
@@ -84,7 +86,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         body: SafeArea(
             child: SingleChildScrollView(
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 32),
+                padding:(MediaQuery.of(context).size.width>webScreenSize)? EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width/3,vertical:20 ):EdgeInsets.symmetric(horizontal: 32),
 
                 child: ConstrainedBox(
                   constraints: BoxConstraints(
@@ -100,13 +102,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 child: Container(),
                                 flex: 1,
                         ),
-                        SvgPicture.asset(
-                                'assets/images/ic_instagram.svg',
-                                color: primaryColor,
-                                height: 64,
-                        ),
+                    SvgPicture.asset(
+                      'assets/images/ic_instagram.svg',
+                      height: 64,
+                      color: primaryColor,
+                    ),
                         SizedBox(
-                                height: 64,
+                                height: 30,
                         ),
                         Stack(
                                 children: [

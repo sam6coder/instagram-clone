@@ -7,7 +7,9 @@ import '../providers/user_provider.dart';
 
 class CommentCard extends StatefulWidget {
   final snap;
-  const CommentCard({Key? key,required this.snap});
+  final String id;
+  final String pid;
+  const CommentCard({Key? key,required this.snap,required this.id,required this.pid});
 
   @override
   State<CommentCard> createState() => _CommentCardState();
@@ -26,7 +28,7 @@ class _CommentCardState extends State<CommentCard> {
           children: [
             CircleAvatar(
               backgroundImage: NetworkImage('${widget.snap['profilePic']}'),
-            radius:25,),
+              radius:25,),
             Expanded(
               child: Padding(
                 padding: EdgeInsets.only(left:16,),
@@ -37,8 +39,8 @@ class _CommentCardState extends State<CommentCard> {
                     RichText(text: TextSpan(
                       children: [
                         TextSpan(
-                          text: '${widget.snap['userName']}    ',
-                          style: TextStyle(fontWeight: FontWeight.bold)
+                            text: '${widget.snap['userName']}    ',
+                            style: TextStyle(fontWeight: FontWeight.bold)
                         ),
                         TextSpan(
                           text:DateFormat.yMMMd().format(
@@ -47,7 +49,7 @@ class _CommentCardState extends State<CommentCard> {
                           style: TextStyle(fontSize: 12,fontWeight: FontWeight.w400),
                         )
 
-                    ],)),
+                      ],)),
                     SizedBox(
                       height: 5,
                     ),
@@ -55,8 +57,8 @@ class _CommentCardState extends State<CommentCard> {
                       children: [
 
                         TextSpan(
-                          text: '${widget.snap['text']}',
-                          style: TextStyle(fontSize: 17)
+                            text: '${widget.snap['text']}',
+                            style: TextStyle(fontSize: 17)
                         ),
                       ],)),
 

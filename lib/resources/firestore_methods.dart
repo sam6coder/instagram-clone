@@ -1,10 +1,13 @@
 import 'dart:typed_data';
 import 'package:instagram_clone/utils/utils.dart';
+import 'package:pro_image_editor/utils/parser/double_parser.dart';
 import 'package:uuid/uuid.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram_clone/models/post.dart';
 import 'package:instagram_clone/resources/storage_methods.dart';
+
+import '../models/story_model.dart';
 
 class FireStoreMethods {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -45,6 +48,33 @@ class FireStoreMethods {
     return res;
   }
 
+  Future<String> uploadStory(
+    String userId,
+    String username,
+    String storyId,
+    List<Uint8List> files,
+  ) async {
+    String res = "some error occured";
+    try {
+      List<String> storyU =
+          await StorageMethods().uploadImage('story', files, true);
+      String storyId = const Uuid().v1();
+
+      Story story = Story(
+          storyUrl: storyU,
+          duration: DateTime.now(),
+          userId: userId,
+          username: username,
+          storyId: storyId);
+
+      _firestore.collection('story').doc(storyId).set(story.toJson());
+      res = "Success";
+    } catch (e) {
+      res = e.toString();
+    }
+    return res;
+  }
+
   Future<void> likePost(String postId, String uid, List likes) async {
     try {
       if (likes.contains(uid)) {
@@ -73,6 +103,7 @@ class FireStoreMethods {
       print(e.toString());
     }
   }
+
   Future<void> likesPostDoubleTap(String postId, String uid, String username,
       String profilePic, String name) async {
     try {
@@ -81,7 +112,7 @@ class FireStoreMethods {
           .doc(postId)
           .collection('likess');
       QuerySnapshot querySnapshot =
-      await document.where('uid', isEqualTo: uid).get();
+          await document.where('uid', isEqualTo: uid).get();
       if (querySnapshot.docs.isEmpty) {
         String likesId = Uuid().v1();
         await _firestore
@@ -101,7 +132,6 @@ class FireStoreMethods {
       print(e.toString());
     }
   }
-
 
   Future<void> commentPost(String postId, String uid, String username,
       String text, String profilePic) async {
@@ -174,6 +204,19 @@ class FireStoreMethods {
     }
   }
 
+  Future<void> deleteComment(String commentId, String postId) async {
+    try {
+      _firestore
+          .collection('posts')
+          .doc(postId)
+          .collection('comments')
+          .doc(commentId)
+          .delete();
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
   Future<void> followUser(String uid, String followId) async {
     try {
       DocumentSnapshot snap =
@@ -187,7 +230,7 @@ class FireStoreMethods {
         await _firestore.collection('users').doc(uid).update({
           'following': FieldValue.arrayRemove([followId])
         });
-      }else{
+      } else {
         await _firestore.collection('users').doc(followId).update({
           'followers': FieldValue.arrayUnion([uid])
         });
@@ -200,18 +243,21 @@ class FireStoreMethods {
     }
   }
 
-  Future<String> editProfile(String uid,String username,String bio,String name,String? gender,String? pronoun) async{
-    try{
-
-
-      await _firestore.collection('users').doc(uid).update({'username':username,'name':name,'bio':bio,'gender':gender,'pronoun':pronoun});
+  Future<String> editProfile(String uid, String username, String bio,
+      String name, String? gender, String? pronoun) async {
+    try {
+      await _firestore.collection('users').doc(uid).update({
+        'username': username,
+        'name': name,
+        'bio': bio,
+        'gender': gender,
+        'pronoun': pronoun
+      });
       print("success");
       return "success";
-    }catch(e){
+    } catch (e) {
       showAlertToast(msg: e.toString(), color: Colors.pink);
       return e.toString();
     }
   }
-
-
 }

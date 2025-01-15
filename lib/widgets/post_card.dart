@@ -6,6 +6,7 @@ import 'package:instagram_clone/providers/user_provider.dart';
 import 'package:instagram_clone/resources/firestore_methods.dart';
 import 'package:instagram_clone/screens/comment_screen.dart';
 import 'package:instagram_clone/utils/colors.dart';
+import 'package:instagram_clone/utils/global_variables.dart';
 import 'package:instagram_clone/utils/utils.dart';
 import 'package:instagram_clone/widgets/like_animation.dart';
 import 'package:instagram_clone/widgets/likes_widget.dart';
@@ -106,15 +107,19 @@ class _PostCardState extends State<PostCard> {
   @override
   Widget build(BuildContext context) {
     final UserModel? user = Provider.of<UserProvider>(context).getUser;
+    final width=MediaQuery.of(context).size.width;
 
     return (user == null)
         ? CircularProgressIndicator()
         : Container(
-            color: mobileBackgroundColor,
-            padding: EdgeInsets.symmetric(vertical: 10),
+              decoration: BoxDecoration(border: Border.all(
+        color: width>webScreenSize?webBackgroundColor:mobileBackgroundColor
+              )),
+            padding: width>webScreenSize?EdgeInsets.symmetric(vertical: 80):EdgeInsets.symmetric(vertical: 10),
             child: Column(
               children: [
                 Container(
+
                   padding: EdgeInsets.symmetric(vertical: 4, horizontal: 16)
                       .copyWith(right: 0),
                   child: Row(
@@ -200,8 +205,8 @@ class _PostCardState extends State<PostCard> {
                     alignment: Alignment.center,
                     children: [
                       SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.35,
-                        width: double.infinity,
+                        height: (width>webScreenSize)?MediaQuery.of(context).size.height * 0.70:MediaQuery.of(context).size.height * 0.35,
+                        width: (width>webScreenSize)?MediaQuery.of(context).size.height * 0.15:double.infinity,
                         child: PageView.builder(
                           itemCount: widget.snap['photoUrl'].length,
                           itemBuilder: (context, index) {
@@ -229,10 +234,11 @@ class _PostCardState extends State<PostCard> {
                                   // Render the appropriate widget based on the file type
                                   if (snapshot.data == "image") {
                                     return SizedBox(
-                                      height:
+                                      height:(width>webScreenSize)?MediaQuery.of(context).size.height *
+                                          0.70:
                                           MediaQuery.of(context).size.height *
                                               0.35,
-                                      width: double.infinity,
+                                      width: (width>webScreenSize)?MediaQuery.of(context).size.height * 0.15:double.infinity,
                                       child: Stack(
                                         children:[ Image.network(
                                           widget.snap['photoUrl'][index],
@@ -337,7 +343,7 @@ class _PostCardState extends State<PostCard> {
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) => CommentScreen(
-                                                  snap: widget.snap,
+                                                  snap: widget.snap,id:widget.snap['postId']
                                                 )));
                                   },
                                   child: Image.asset(

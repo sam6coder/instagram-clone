@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:instagram_clone/screens/signup_screen.dart';
 // import 'package:instagram_clone/screens/home_screen.dart';
 import 'package:instagram_clone/utils/colors.dart';
+import 'package:instagram_clone/utils/global_variables.dart';
 import 'package:instagram_clone/utils/utils.dart';
 import 'package:instagram_clone/widgets/text_field_input.dart';
 import 'package:instagram_clone/resources/auth_methods.dart';
@@ -61,7 +62,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
         body: SafeArea(
             child: Container(
-      padding: EdgeInsets.symmetric(horizontal: 32),
+      padding: (MediaQuery.of(context).size.width>webScreenSize)?EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width/3):EdgeInsets.symmetric(horizontal: 32),
       width: double.infinity,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -83,12 +84,15 @@ class _LoginScreenState extends State<LoginScreen> {
                     .createShader(bounds);
               },
               blendMode: BlendMode.srcIn,
-              child: SvgPicture.asset(
+              child: (MediaQuery.of(context).size.width>webScreenSize)?SvgPicture.asset(
+                'assets/images/ic_instagram.svg',
+                height: 84,
+              ):SvgPicture.asset(
                 'assets/images/ic_instagram.svg',
                 height: 64,
               )),
           SizedBox(
-            height: 64,
+            height: 30,
           ),
           TextFieldInput(
               hintText: 'Enter your email',

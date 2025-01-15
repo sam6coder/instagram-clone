@@ -16,9 +16,11 @@ import 'responsive/web_screen_layout.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'screens/signup_screen.dart';
+import 'package:camera/camera.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // final cameras=await availableCameras();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -27,6 +29,7 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
+  // final List<CameraDescription> cameras;
 
    MyApp({super.key});
 

@@ -9,9 +9,9 @@ import '../providers/user_provider.dart';
 import '../widgets/comment_card.dart';
 
 class CommentScreen extends StatefulWidget {
-  final snap;
+  final snap;final id;
 
-  const CommentScreen({Key? key, required this.snap});
+  const CommentScreen({Key? key, required this.snap,required this.id});
 
   @override
   State<CommentScreen> createState() => _CommentScreenState();
@@ -105,7 +105,8 @@ class _CommentScreenState extends State<CommentScreen> {
           return ListView.builder(
               itemCount: (snapshot.data! as dynamic).docs.length,
               itemBuilder: (context, index) => CommentCard(
-                  snap: (snapshot.data! as dynamic).docs[index].data()));
+                  snap: (snapshot.data! as dynamic).docs[index].data(),id:(snapshot.data! as dynamic).docs[index].id,pid:widget.id
+              ));
         },
       ),
     );
