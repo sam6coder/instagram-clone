@@ -18,7 +18,7 @@ Authentication, storage, and database management are handled using Firebase serv
 <img src="https://github.com/user-attachments/assets/7166f6ef-d768-4c92-b3f8-0b68bce25594" width="250">
 <img src="https://github.com/user-attachments/assets/fdfc6d93-b1b2-4765-99aa-0cc5bb73c884" width="250">
 <img src="https://github.com/user-attachments/assets/2c3cff11-b39f-4e99-873d-8e2ecf735d15" width="250">
-<img src="https://github.com/user-attachments/assets/c3d39719-d376-46e6-98db-b5de154708b5" width="250">
+<img src="https://github.com/user-attachments/assets/527b91a1-d3ae-4b2a-8397-d201e836f3e6" width="250">
 <img src="https://github.com/user-attachments/assets/2bef91ee-ac15-4e4b-a310-e1f5e26bd00f" width="250"> 
 <img src="https://github.com/user-attachments/assets/adfcac33-2ddb-4639-bdb2-4687105bf838" width="250">
 <img src="https://github.com/user-attachments/assets/3960665a-d9b1-49b5-bf1e-a35297169377" width="250">
