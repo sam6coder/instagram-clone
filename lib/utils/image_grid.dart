@@ -4,13 +4,17 @@ import 'package:photo_manager/photo_manager.dart';
 
 class ImageGridItem extends StatefulWidget {
   final AssetEntity image;
-  final bool isChecked;
+  final bool? isChecked;
   final VoidCallback onTap;
+  final int width;
+  final int height;
   const ImageGridItem({
     Key? key,
     required this.image,
-    required this.isChecked,
-    required this.onTap
+    this.isChecked,
+    required this.onTap,
+    required this.width,
+    required this.height
 });
 
   @override
@@ -23,7 +27,7 @@ class _ImageGridItemState extends State<ImageGridItem> {
   @override
   void initState(){
     super.initState();
-    thumbNailFuture=widget.image.thumbnailDataWithSize(ThumbnailSize(300,300));
+    thumbNailFuture=widget.image.thumbnailDataWithSize(ThumbnailSize(widget.width,widget.height));
 
   }
   @override
@@ -64,16 +68,16 @@ class _ImageGridItemState extends State<ImageGridItem> {
                           color: Colors.white
                         )
                       ),
-                      child: CircleAvatar(
 
+                      child: CircleAvatar(
                           radius: 8,
                           backgroundColor: Colors.transparent,
 
-                          child: (widget.isChecked)?Icon(
+                          child: (widget.isChecked!=null)?(widget.isChecked!)?Icon(
                             Icons.check_circle,
                             color: Colors.blue,
                             size: 18,
-                          ):null),
+                          ):null:null),
                     ))
               ],
             ),

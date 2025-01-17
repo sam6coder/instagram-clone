@@ -200,6 +200,8 @@ class _AddPostScreenState extends State<AddPostScreen> {
                       itemCount: galleryImages!.length,
                       itemBuilder: (context, index) {
                         return ImageGridItem(
+                          width: 300,
+                            height: 300,
                             image: galleryImages![index],
                             isChecked: isCheckedList[index],
                             onTap:() async {

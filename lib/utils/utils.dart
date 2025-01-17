@@ -7,6 +7,9 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pro_image_editor/pro_image_editor.dart';
 import 'package:image_editor_plus/image_editor_plus.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:image/image.dart' as img;
+
+
 
 pickImage(ImageSource source)async{
   final ImagePicker _imagePicker=ImagePicker();
@@ -121,6 +124,7 @@ Future<File?> send({required BuildContext context,required Uint8List data}) asyn
 
 }
 
+
 // Future<Uint8List?> convertVideoToUint8List(String videoPath) async {
 //   try {
 //     final thumbnail = await VideoThumbnail.thumbnailData(
@@ -139,5 +143,39 @@ Future<File?> send({required BuildContext context,required Uint8List data}) asyn
 //
 //
 //
+
+void verifyImageDimensions(Uint8List data) {
+  final decodedImage = img.decodeImage(data);
+  if (decodedImage != null) {
+    print('Image dimensions: ${decodedImage.width}x${decodedImage.height}');
+  } else {
+    print('Failed to decode image');
+  }
+}
+
+Future<Uint8List> convertImageToUint8List(File imageFile) async {
+  final bytes = await imageFile.readAsBytes();
+  return Uint8List.fromList(bytes);
+}
+Uint8List resizeImage(Uint8List data, double width, double height) {
+  final originalImage = img.decodeImage(data);
+  if (originalImage == null) throw Exception('Failed to decode image');
+  print("width $width height $height");
+  final resizedImage = img.copyResize(originalImage, width: width.toInt(), height: height.toInt());
+  return Uint8List.fromList(img.encodeJpg(resizedImage));
+}
+
+Future<File> convertUint8ListToFile(Uint8List uint8list, String fileName) async {
+  final directory = await getTemporaryDirectory();
+
+  // Create a File object with a path in the temporary directory
+  final file = File('${directory.path}/$fileName');
+
+  // Write the Uint8List data to the file
+  await file.writeAsBytes(uint8list);
+
+  return file; // Return the File object
+}
+
 
 

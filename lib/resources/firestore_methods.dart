@@ -51,7 +51,6 @@ class FireStoreMethods {
   Future<String> uploadStory(
     String userId,
     String username,
-    String storyId,
     List<Uint8List> files,
   ) async {
     String res = "some error occured";
