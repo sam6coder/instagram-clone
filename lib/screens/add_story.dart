@@ -13,6 +13,7 @@ import 'package:provider/provider.dart';
 import 'package:image/image.dart' as img;
 import '../models/user.dart';
 import '../providers/user_provider.dart';
+import '../widgets/video_player.dart';
 
 class AddStoryScreen extends StatefulWidget {
   const AddStoryScreen({super.key});
@@ -30,7 +31,7 @@ class _AddStoryScreenState extends State<AddStoryScreen> {
   // bool isCaptured=false;
   String? _capturedImagePath;
   List<Uint8List> files=[];
-  bool isLoading=false;
+  bool isLoading=false;bool cameraCaptured=false;
 
   @override
   void initState() {
@@ -102,8 +103,7 @@ class _AddStoryScreenState extends State<AddStoryScreen> {
         final XFile image = await _cameraController.takePicture();
         setState(() {
           _capturedImagePath = image.path;
-
-
+          cameraCaptured=true;
         });
       }
     } catch (e) {
@@ -122,29 +122,27 @@ class _AddStoryScreenState extends State<AddStoryScreen> {
     });
   }
 
-  // Future<void> cameraPictures() async {
-  //   final pickedFile = await picker.pickImage(source: ImageSource.camera);
-  //   if (pickedFile != null) {
-  //     // print(pickedFile.path);
-  //     setState(() {
-  //       // selectedImage?[0] = File(pickedFile.path);
-  //       // selectedImage.add(File(pickedFile.path));
-  //     });
-  //   }
-  // }
+
   @override
   Widget build(BuildContext context) {
+    print("camers $cameraCaptured");
     final UserModel user = Provider.of<UserProvider>(context).getUser;
+    final height=MediaQuery.of(context).size.height;
 
     return Scaffold(
         body: _isCameraInitialized
             ? Stack(
                 children: [
-                  Container(
-                      height: MediaQuery.of(context).size.height * 0.85,
-                      child: (_capturedImagePath != null)
-                          ? Image.file(File(_capturedImagePath!),fit: BoxFit.cover,)
-                          : CameraPreview(_cameraController)),
+                  // if(cameraCaptured==false && _capturedImagePath!=null)
+                  //   Positioned(top:0,child: Container(height: MediaQuery.of(context).size.height*0.4)),
+                  Center(
+                    child: Container(
+                        height:(_capturedImagePath!=null)?(cameraCaptured==false)? MediaQuery.of(context).size.height * 0.3:MediaQuery.of(context).size.height * 0.85:MediaQuery.of(context).size.height * 0.85,
+                        child: (_capturedImagePath != null)?(_capturedImagePath!.endsWith('.mp4'))
+                            ? VideoThumbnail(file: File(_capturedImagePath!)):Image.file(File(_capturedImagePath!))
+                            : Center(child: CameraPreview(_cameraController))),
+                  ),
+
                   Align(
                     alignment: Alignment.bottomCenter,
                     child: Container(
@@ -165,20 +163,37 @@ class _AddStoryScreenState extends State<AddStoryScreen> {
                       child: GestureDetector(
                         onTap: () async{
                           final imge=await Navigator.of(context).push(MaterialPageRoute(builder: (context)=>GalleryImage()));
+
                           File rf=await imge.file;
-                          final imageData=await convertImageToUint8List (rf);
-                          verifyImageDimensions(imageData);
-                          final imgData=resizeImage(imageData, MediaQuery.of(context).size.width,MediaQuery.of(context).size.height*0.3);
-                          File imgd=await convertUint8ListToFile(imgData, 'resized');
-                          setState(() {
-                            _capturedImagePath=imgd.path;
-                          });
+
+                          print("rff ${rf}");
+                          if(!rf.path.endsWith('mp4')) {
+                            final imageData = await convertImageToUint8List(rf);
+                            verifyImageDimensions(imageData);
+                            final imgData = resizeImage(imageData, MediaQuery
+                                .of(context)
+                                .size
+                                .width, MediaQuery
+                                .of(context)
+                                .size
+                                .height * 0.3);
+                            File imgd = await convertUint8ListToFile(
+                                imgData, 'resized');
+                            print(imgd.path);
+                            setState(() {
+                              _capturedImagePath = imgd.path;
+                              cameraCaptured=false;
+                            });
+                          }else{
+                            setState(() {
+                              _capturedImagePath=rf.path;
+                              cameraCaptured=false;
+
+                            });
+                          }
+                          print(_capturedImagePath);
                         },
-                        child: Container(
-                          height: 50,
-                          width: 50,
-                          color: Colors.white,
-                        ),
+                        child: Icon(Icons.image,color: Colors.white,size: 45,)
                       ),
                     ),
 
@@ -245,7 +260,7 @@ class _AddStoryScreenState extends State<AddStoryScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             GestureDetector(onTap: (){
-                              Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>AddPostScreen()));
+                              Navigator.of(context).push(MaterialPageRoute(builder: (context)=>FeedScreen()));
                             },child: Text('POST',style: TextStyle(color: Colors.grey,fontSize: 20,fontWeight: FontWeight.bold),)),
                             Text('STORY',style: TextStyle(color: Colors.white,fontSize: 20,fontWeight: FontWeight.bold),)
                           ]

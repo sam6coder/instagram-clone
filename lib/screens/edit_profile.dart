@@ -50,7 +50,7 @@ class _EditProfileState extends State<EditProfile> {
     setState(() {
       croppedImage=croppedImag;
     });
-    print(croppedImage!.path);
+    // print(croppedImage!.path);
   }
   final List<String> items=['Male','Female','Custom','Prefer not to say'];
   String? selectedItem;
@@ -70,7 +70,7 @@ class _EditProfileState extends State<EditProfile> {
 
   @override
   Widget build(BuildContext context) {
-    print("loading $isLoading");
+    // print("loading $isLoading");
     final UserModel? user = Provider.of<UserProvider>(context).getUser;
     bioController=TextEditingController(text: user!.bio);
     nameController=TextEditingController(text: user!.name);

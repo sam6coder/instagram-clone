@@ -57,16 +57,32 @@ class FireStoreMethods {
     try {
       List<String> storyU =
           await StorageMethods().uploadImage('story', files, true);
+
       String storyId = const Uuid().v1();
 
-      Story story = Story(
-          storyUrl: storyU,
-          duration: DateTime.now(),
-          userId: userId,
-          username: username,
-          storyId: storyId);
+      CollectionReference collectionRef =
+          FirebaseFirestore.instance.collection('story');
 
-      _firestore.collection('story').doc(storyId).set(story.toJson());
+      QuerySnapshot querySnapshot =
+          await collectionRef.where('username', isEqualTo: username).get();
+      if (querySnapshot.size == 0) {
+        Story story = Story(
+            storyUrl: storyU,
+            duration: DateTime.now(),
+            userId: userId,
+            username: username,
+            storyId: storyId);
+        _firestore.collection('story').doc(storyId).set(story.toJson());
+      } else {
+        final usr = querySnapshot.docs.first['username'];
+        print("username ${usr}");
+        final uid = querySnapshot.docs.first.id;
+        await _firestore
+            .collection('story')
+            .doc(uid)
+            .update({'storyUrl': FieldValue.arrayUnion(files)});
+      }
+
       res = "Success";
     } catch (e) {
       res = e.toString();

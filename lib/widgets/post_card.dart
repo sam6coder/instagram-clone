@@ -48,7 +48,7 @@ class _PostCardState extends State<PostCard> {
             .get();
         setState(() {
           username = querySnapshot.docs.first['username'] as String;
-          print(username);
+          // print(username);
         });
       }
     } catch (e) {
@@ -253,7 +253,6 @@ class _PostCardState extends State<PostCard> {
                                       ),
                                     );
                                   } else if (snapshot.data == "video") {
-                                    print(widget.snap['photoUrl'][index]);
                                     return SizedBox(
                                         width: double.infinity,
                                         child: VideoPlayerScreen(

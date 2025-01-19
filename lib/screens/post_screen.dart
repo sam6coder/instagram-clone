@@ -267,7 +267,7 @@ class _PostScreenState extends State<PostScreen> {
                         final bytes = await widget.selectedImages[i]
                             .readAsBytes();
                         _files.add(bytes);
-                        print("first : $bytes");
+                        // print("first : $bytes");
 
                       }
 

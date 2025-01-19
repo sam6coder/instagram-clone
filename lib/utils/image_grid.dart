@@ -57,6 +57,7 @@ class _ImageGridItemState extends State<ImageGridItem> {
                   width: double.infinity,
                   height: double.infinity,
                 ),
+                if(widget.isChecked!=null)
                 Positioned(
                     bottom: 8,
                     right: 8,
@@ -73,11 +74,11 @@ class _ImageGridItemState extends State<ImageGridItem> {
                           radius: 8,
                           backgroundColor: Colors.transparent,
 
-                          child: (widget.isChecked!=null)?(widget.isChecked!)?Icon(
+                          child: (widget.isChecked!)?Icon(
                             Icons.check_circle,
                             color: Colors.blue,
                             size: 18,
-                          ):null:null),
+                          ):null),
                     ))
               ],
             ),

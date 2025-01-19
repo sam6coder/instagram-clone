@@ -209,7 +209,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                               setState(() {
                                 if(isMultiSelect) {
                                   isCheckedList[index] = !isCheckedList[index];
-                                  print("yessss ${selectedImage.length}");
+                                  // print("yessss ${selectedImage.length}");
 
                                   if (isCheckedList[index]) {
                                     selectedImage.add(_file!);
@@ -218,7 +218,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                                     // selectedImage.remove(file);
                                     selectedImage.removeWhere((file) => file.toString() == _file.toString());
 
-                                    print("no ${selectedImage.length}");
+                                    // print("no ${selectedImage.length}");
                                   }
                                 }else{
                                   selectedImage.clear();
