@@ -52,6 +52,7 @@ class FireStoreMethods {
     String userId,
     String username,
     List<Uint8List> files,
+      String photoUrl
   ) async {
     String res = "some error occured";
     try {
@@ -71,7 +72,8 @@ class FireStoreMethods {
             duration: DateTime.now(),
             userId: userId,
             username: username,
-            storyId: storyId);
+            storyId: storyId,
+        photoUrl: photoUrl);
         _firestore.collection('story').doc(storyId).set(story.toJson());
       } else {
         final usr = querySnapshot.docs.first['username'];
@@ -80,7 +82,7 @@ class FireStoreMethods {
         await _firestore
             .collection('story')
             .doc(uid)
-            .update({'storyUrl': FieldValue.arrayUnion(files)});
+            .update({'storyUrl': FieldValue.arrayUnion(storyU)});
       }
 
       res = "Success";

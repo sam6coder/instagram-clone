@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:instagram_clone/resources/firestore_methods.dart';
@@ -14,6 +15,7 @@ import 'package:image/image.dart' as img;
 import '../models/user.dart';
 import '../providers/user_provider.dart';
 import '../widgets/video_player.dart';
+
 
 class AddStoryScreen extends StatefulWidget {
   const AddStoryScreen({super.key});
@@ -44,13 +46,13 @@ class _AddStoryScreenState extends State<AddStoryScreen> {
 
 
 
-  void postImage(String uid,String username,List<Uint8List> files) async{
+  void postImage(String uid,String username,List<Uint8List> files,String photoUrl) async{
     setState(() {
       isLoading=true;
     });
     showSnackBar('Posting...', context);
     try{
-      String res=await FireStoreMethods().uploadStory(uid, username, files);
+      String res=await FireStoreMethods().uploadStory(uid, username, files,photoUrl);
       if(res=="Success") {
         setState(() {
           isLoading = false;
@@ -122,10 +124,17 @@ class _AddStoryScreenState extends State<AddStoryScreen> {
     });
   }
 
+  @override
+
+  void dispose(){
+    _capturedImagePath=null;
+    super.dispose();
+  }
+
 
   @override
   Widget build(BuildContext context) {
-    print("camers $cameraCaptured");
+    print("camers ${_capturedImagePath}");
     final UserModel user = Provider.of<UserProvider>(context).getUser;
     final height=MediaQuery.of(context).size.height;
 
@@ -162,11 +171,14 @@ class _AddStoryScreenState extends State<AddStoryScreen> {
                       bottom: 30,
                       child: GestureDetector(
                         onTap: () async{
+                          setState(() {
+                            _capturedImagePath=null;
+                          });
                           final imge=await Navigator.of(context).push(MaterialPageRoute(builder: (context)=>GalleryImage()));
 
                           File rf=await imge.file;
 
-                          print("rff ${rf}");
+                          print("rff ${rf.path}");
                           if(!rf.path.endsWith('mp4')) {
                             final imageData = await convertImageToUint8List(rf);
                             verifyImageDimensions(imageData);
@@ -177,9 +189,10 @@ class _AddStoryScreenState extends State<AddStoryScreen> {
                                 .of(context)
                                 .size
                                 .height * 0.3);
+                            int randomInt = Random().nextInt(100);
                             File imgd = await convertUint8ListToFile(
-                                imgData, 'resized');
-                            print(imgd.path);
+                                imgData, '${randomInt}');
+                            // print(imgd.path);
                             setState(() {
                               _capturedImagePath = imgd.path;
                               cameraCaptured=false;
@@ -191,7 +204,7 @@ class _AddStoryScreenState extends State<AddStoryScreen> {
 
                             });
                           }
-                          print(_capturedImagePath);
+                          // print(_capturedImagePath);
                         },
                         child: Icon(Icons.image,color: Colors.white,size: 45,)
                       ),
@@ -224,10 +237,11 @@ class _AddStoryScreenState extends State<AddStoryScreen> {
                             setState(() {
                               isLoading=true;
                             });
+                            files.clear();
                             final img=File(_capturedImagePath!);
                             final bytes=await img.readAsBytes();
                             files.add(bytes);
-                            postImage(user.uid, user.username,files );
+                            postImage(user.uid, user.username,files ,user.photoUrl);
 
                           },
                           child: Container(

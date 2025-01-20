@@ -8,29 +8,33 @@ class Story {
   final String userId;
   final String username;
   final String storyId;
+  final String photoUrl;
 
   Story(
       {required this.storyUrl,
       required this.duration,
       required this.userId,
       required this.username,
-      required this.storyId});
+      required this.storyId,
+      required this.photoUrl});
 
   Map<String, dynamic> toJson() => {
         "storyUrl": storyUrl,
         "username": username,
         "userId": userId,
         "duration": duration,
-        "storyId": storyId
+        "storyId": storyId,
+    "photoUrl":photoUrl
       };
 
-  static Story fromSnap(DocumentSnapshot snap) {
-    var snapshot = snap.data() as Map<String, dynamic>;
+  factory Story.fromSnap(Map<String,dynamic> snapshot) {
+    // var snapshot = snap.data() as Map<String, dynamic>;
     return Story(
-        storyUrl: snapshot['storyUrl'],
+        storyUrl: List<String>.from(snapshot['storyUrl']),
         username: snapshot['username'],
         userId: snapshot['userId'],
-        duration: snapshot['duration'],
-        storyId: snapshot['storyId']);
+        duration: (snapshot['duration'] as Timestamp).toDate(),
+        storyId: snapshot['storyId'],
+    photoUrl: snapshot['photoUrl']);
   }
 }

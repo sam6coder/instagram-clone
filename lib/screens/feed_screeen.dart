@@ -71,80 +71,106 @@ class _FeedScreenState extends State<FeedScreen> {
       body: (user.user==null)?Center(child: CircularProgressIndicator()):SingleChildScrollView(
         child: Column(
           children: [
-            // Container(
-            //   height: MediaQuery.of(context).size.height*0.5,
-            //   width: double.infinity,
-            //   child: StreamBuilder(stream: FirebaseFirestore.instance.collection('story').orderBy('duration',descending: true).snapshots(),
-            //       builder: (context,AsyncSnapshot<QuerySnapshot<Map<String,dynamic>>> snapshot){
-            //     if(snapshot.connectionState==ConnectionState.waiting){
-            //       return CircularProgressIndicator();
-            //     }
-            //     if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-            //       return Center(child: Text('No data available', style: TextStyle(color: Colors.white)));
-            //     }
-            //     // final stories=[];
-            //     // Story.fromSnap(snapshot.data!.docs as dynamic);
-            //
-            //     return SizedBox(
-            //       height: MediaQuery.of(context).size.height*0.5,
-            //       child: PageView.builder(
-            //
-            //         physics: BouncingScrollPhysics(),
-            //         controller: PageController(),
-            //         itemCount: snapshot.data!.docs.length,
-            //         itemBuilder: (context,index){
-            //         final story=Story.fromSnap(snapshot.data!.docs[index]);
-            //         return UserStoryView(
-            //               story: story,
-            //           onComplete: (){
-            //                 if(index+1<snapshot.data!.docs.length){
-            //                   pageController.animateToPage(
-            //
-            //                   )
-            //                 }
-            //           },
-            //
-            //         );
-            //         },
-            //       ),
-            //     );
-            //
-            //
-            //     // return PageView.builder(
-            //     //   // onPageChanged: (int index) {
-            //     //   //   print("Page changed to: $index");
-            //     //   // },
-            //     //
-            //     //   // controller: PageController(),
-            //     //
-            //     //         scrollDirection: Axis.horizontal,
-            //     //         itemCount: snapshot.data!.docs.length,
-            //     //         itemBuilder: (context,index){
-            //     //           print("index ${index}");
-            //     //           return Column(
-            //     //           children: [
-            //     //             // Padding(
-            //     //             //   padding: const EdgeInsets.all(5),
-            //     //             //   child: GestureDetector(
-            //     //             //     onTap: (){
-            //     //             //
-            //     //             //       Navigator.of(context).push(MaterialPageRoute(builder: (context)=>StoryScreen(snap: snapshot.data!.docs[index].data())));
-            //     //             //     },
-            //     //             //     child: CircleAvatar(
-            //     //             //       radius: 40,
-            //     //             //       backgroundColor: Colors.white,
-            //     //             //     ),
-            //     //             //   ),
-            //     //             // ),
-            //     //             Text('${snapshot.data!.docs[index]['username']}',style: TextStyle(color: Colors.white),)
-            //     //           ],);},
-            //     //
-            //     //
-            //     //
-            //     //     );
-            //   }),
-            //
-            //   ),
+            Container(
+              padding: EdgeInsets.only(left: 20,right: 20,top: 10),
+              height: MediaQuery.of(context).size.height*0.14,
+              width: double.infinity,
+              child: StreamBuilder(stream: FirebaseFirestore.instance.collection('story').orderBy('duration',descending: true).snapshots(),
+                  builder: (context,AsyncSnapshot<QuerySnapshot<Map<String,dynamic>>> snapshot){
+                if(snapshot.connectionState==ConnectionState.waiting){
+                  return Transform.scale(
+                      scaleY: 0.1,
+                      scaleX: 0.07,
+                      child: CircularProgressIndicator(
+                        color: Colors.white,
+                        strokeWidth: 6,
+                      ));
+                }
+                if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                  return Center(child: Text('No data available', style: TextStyle(color: Colors.white)));
+                }
+                // final stories=[];
+                // Story.fromSnap(snapshot.data!.docs as dynamic);
+
+                return Padding(
+                  padding: const EdgeInsets.only(right:10.0),
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height*0.14,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+
+                      physics: BouncingScrollPhysics(),
+                      controller: PageController(),
+                      itemCount: snapshot.data!.docs.length,
+                      itemBuilder: (context,index){
+                      final story=snapshot.data!.docs[index].data() as Map<String,dynamic>;
+                      return Padding(
+                        padding: const EdgeInsets.only(right:10.0),
+                        child: Column(
+                          children: [
+                            GestureDetector(
+                              onTap:(){
+                                Navigator.push(context,MaterialPageRoute(builder: (context)=>StoryCard(story: snapshot.data!.docs, initialIndex:index)));
+
+                              },
+                              child: Column(
+                                children: [
+                                  CircleAvatar(
+                                    radius: 40,
+                                    backgroundImage: NetworkImage(story['photoUrl']),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Text('${story['username']}',style: TextStyle(color: Colors.white,fontSize: 15),)
+                                ],
+                              ),
+
+                            ),
+                          ],
+                        ),
+                      );
+                      },
+                    ),
+                  ),
+                );
+
+
+                // return PageView.builder(
+                //   // onPageChanged: (int index) {
+                //   //   print("Page changed to: $index");
+                //   // },
+                //
+                //   // controller: PageController(),
+                //
+                //         scrollDirection: Axis.horizontal,
+                //         itemCount: snapshot.data!.docs.length,
+                //         itemBuilder: (context,index){
+                //           print("index ${index}");
+                //           return Column(
+                //           children: [
+                //             // Padding(
+                //             //   padding: const EdgeInsets.all(5),
+                //             //   child: GestureDetector(
+                //             //     onTap: (){
+                //             //
+                //             //       Navigator.of(context).push(MaterialPageRoute(builder: (context)=>StoryScreen(snap: snapshot.data!.docs[index].data())));
+                //             //     },
+                //             //     child: CircleAvatar(
+                //             //       radius: 40,
+                //             //       backgroundColor: Colors.white,
+                //             //     ),
+                //             //   ),
+                //             // ),
+                //             Text('${snapshot.data!.docs[index]['username']}',style: TextStyle(color: Colors.white),)
+                //           ],);},
+                //
+                //
+                //
+                //     );
+              }),
+
+              ),
         
             Container(
               height: MediaQuery.of(context).size.height*0.7,

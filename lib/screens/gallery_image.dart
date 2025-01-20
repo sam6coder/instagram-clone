@@ -74,8 +74,10 @@ class _GalleryImageState extends State<GalleryImage> {
                   mainAxisSpacing: 2),
               itemCount: galleryImages!.length,
               itemBuilder: (context, index) {
-                return ImageGridItem(image: galleryImages![index], onTap: (){
-                  print("indexx ${galleryImages![index].file}");
+                return ImageGridItem(image: galleryImages![index], onTap: ()async{
+                  File? rf=await galleryImages![index].file;
+
+                  print("indexx ${rf?.path}");
                   Navigator.of(context).pop(galleryImages![index]);
                 }, width: 300, height: 600);
 

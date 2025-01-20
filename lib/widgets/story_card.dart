@@ -11,30 +11,47 @@ import 'package:story_view/widgets/story_view.dart';
 
 import '../models/story_model.dart';
 
-class UserStoryView extends StatelessWidget {
+class StoryCard extends StatefulWidget {
 
-  final Story story;
-  final VoidCallback onComplete;
+  final  story;
+  final int initialIndex;
 
-  const UserStoryView({required this.story, required this.onComplete});
+  const StoryCard({required this.story, required this.initialIndex});
 
   @override
+  State<StoryCard> createState() => _StoryCardState();
+}
+
+class _StoryCardState extends State<StoryCard> {
+  @override
+  void initState(){
+    super.initState();
+    pageController=PageController();
+  }
+  
+  final storyController = StoryController();
+  late PageController pageController;
+
   Widget build(BuildContext context) {
-    final storyController = StoryController();
-
-    return StoryView(
-      storyItems:story.storyUrl.map((url){
-        return StoryItem.pageImage(url: url, controller: storyController);
-
-      }).toList(),
-      controller: storyController,
-      onComplete: onComplete,
-      onVerticalSwipeComplete: (direction){
-        if(direction==Direction.down){
-          Navigator.pop(context);
-        }
-      },
+    return Scaffold(
+      body: PageView.builder(
+        controller: pageController,
+          itemCount: widget.story.length,
+          itemBuilder:(context,index){
+            return StoryScreen(
+              snap:widget.story[index],
+              onComplete:(){
+                if(index+1<widget.story.length){
+                  pageController.animateToPage(index+1, duration: Duration(milliseconds: 300), curve: Curves.easeInOut);
+                }else{
+                  Navigator.pop(context);
+                }
+              }
+            );
+          }),
     );
+
+
   }
 }
 
